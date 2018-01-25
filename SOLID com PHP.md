@@ -1,18 +1,18 @@
-Hoje quero compartilhar com vocês um pouco dos meus estudos sobre padrões e projeto ou designer pattern. Isso vai ser feito com uma sequência de artigos que vou postar posteriormente, um para cada padrão.
+Hoje quero compartilhar com vocês um pouco dos meus estudos sobre padrões de projeto(designer pattern). Isso vai ser feito com uma sequência de artigos que vou postar posteriormente, um para cada padrão.
 
-Mas antes mesmo de aborta um padrão especifico acho muito importante falar de SOLID que são 5 principais princípios da POO(programação orientada a objeto) para te ajudar a escrever códigos melhores em qualquer linguagem que tenha o paradigma POO. E como não poderia ser diferente eu vou exemplificar o SOLID com exemplos escritos PHP.
+Mas antes mesmo de abordar um padrão especifico acho muito importante falar de SOLID. SOLID são os 5 principais princípios da POO(programação orientada a objeto), eles vão te ajudar a escrever códigos melhores em qualquer linguagem que tenha o paradigma POO. E como não poderia ser diferente eu vou exemplificar o SOLID com exemplos escritos PHP.
 
 Para começar já vou dizer que SOLID é acrônimo de:
 
 **S**ingle responsibility principle(Princípio da Responsabilidade Única).
-**O**pen/closed principle(Principio Aberto/Fechado).
+**O**pen/closed principle(Princípio Aberto/Fechado).
 **L**iskov substitution principle(Princípio da Substituição de Liskov).
 **I**nterface segregation principle(Princípio da Segregação da Interface).
 **D**ependency inversion principle(Princípio da inversão da dependência).
 
 Nesse artigos vamos desmistificar basicamente cada uma das letras do SOLID começando com **S**.
 
-## **S**ingle responsibility principle(Princípio da Responsabilidade Única).
+## **S**ingle responsibility principle(Princípio da Responsabilidade Única)
 O primeiro princípio do SOLID basicamente diz que uma classe deveria ter exclusivamente uma responsabilidade. Diz que quando temos uma classe que não atenda esse princípio devemos divila em mais classes até que isso ocorra.
 
 Vamos criar um exemplo. Vamos criar uma pequena classe para gerenciar nossos relatórios.
@@ -82,7 +82,7 @@ class JsonReportFormatter
 
 Agora foi criado uma nova classe chamada *JsonReportFormatter* responsavel exclusivamente em formatar o relatório em JSON.
 
-## **O**pen/closed principle (Princípio Aberto/Fechado).
+## **O**pen/closed principle (Princípio Aberto/Fechado)
 O segundo princípio diz que você deve ser capaz de estender um comportamento de uma classe, sem modificá-lo, a classe está aberto para expansão e fechado para alteração.
 
 Sempre que precisarmos criar um novo recurso devemos criar uma nova classe que implemente esse recurso.
@@ -162,7 +162,7 @@ class Csv implements Writer
 ```
 Agora sim, implementamos os mesmos recursos que tínhamos antes, mas agora para implementar um novo recurso como escrever em DOC por exemplo, basta criar uma nova classe *Doc* que implemente a interface *Writer* e pronto, não alteramos nada da classe *Logger*.
 
-## **L**iskov substitution principle(Princípio da Substituição de Liskov).
+## **L**iskov substitution principle(Princípio da Substituição de Liskov)
 O terceiro princípio é o mais complicado de entender, ele foi escrito pela cientista da computação Barbara Liskov que resumiu o seu princípio com
  > Se q(x) é uma propriedade demonstrável dos objetos x de tipo T. Então q(y) deve ser verdadeiro para objetos y de tipo S onde S é um subtipo de T.
 
@@ -221,8 +221,8 @@ Mas ainda temos um problema, ambas as classes tem dependências para funcionar, 
 
  > Obs: Para isso precisamos sempre cuidar o que vamos retornar nos nossos métodos para não quebrar o código.
 
-## **I**nterface segregation principle(Princípio da Segregação da Interface).
-O quarto princípio diz que muitas interfaces específicas são melhores que uma única interface, para não forçar uma classe a implementar um método que ela não vai usar. Precisamos criar pequenas interfaces mais específicas ao invés de termos uma unica generica.
+## **I**nterface segregation principle(Princípio da Segregação da Interface)
+O quarto princípio diz que muitas interfaces específicas são melhores que uma única interface, para não forçar uma classe a implementar um método que ela não vai usar. Precisamos criar pequenas interfaces mais específicas ao invés de termos uma única generica.
 
 Vamos exemplificar para entender melhor, vamos criar algumas interfaces e classes de aves para nos ajudar.
 ```php
@@ -353,7 +353,7 @@ class Andorinha implements AvesQueVoam
 ```
 Agora sim, temos as interfaces *AvesQueVoam*, *AvesQueNadam* ao invés de somente uma interface *Aves*.
 
-## **D**ependency inversion principle (Princípio da inversão da dependência).
+## **D**ependency inversion principle (Princípio da inversão da dependência)
 O último e quinto princípio diz para que uma classe dependa de uma abstração e não de uma implementação.
 
 Vamos exemplificar.
@@ -418,7 +418,7 @@ Com isso esclarecemos as noções básica para começar a implementar os princí
 
  > Obs: Todas os códigos que te mostrei aqui são apenas conceituais e servem para nos ajudar a entender o conteúdo abordado nesse artigo.
 
-## Referencias.
+## Referências
 <https://www.schoolofnet.com/curso-solid-com-php/>
 <https://en.wikipedia.org/wiki/SOLID_(object-oriented_design)>
 <http://www.eduardopires.net.br/2013/04/orientacao-a-objeto-solid/>
