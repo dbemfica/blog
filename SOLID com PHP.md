@@ -79,8 +79,7 @@ class JsonReportFormatter
     }
 }
 ```
-
-Agora foi criado uma nova classe chamada *JsonReportFormatter* responsavel exclusivamente em formatar o relatório em JSON.
+Agora foi criado uma nova classe chamada *JsonReportFormatter* responsável exclusivamente em formatar o relatório em JSON.
 
 ## **O**pen/closed principle (Princípio Aberto/Fechado)
 O segundo princípio diz que você deve ser capaz de estender um comportamento de uma classe, sem modificá-lo, a classe está aberto para expansão e fechado para alteração.
@@ -99,9 +98,9 @@ class Logger
     }
 }
 ```
-Nesse exemplo criamos um arquivo .txt para armazenar a mensagem do log.
+Nesse exemplo a nossa classe cria arquivos .txt para armazenar as mensagens do log.
 
-Agora se quisermos criar um para criar o arquivo em CSV precisaríamos modificar a classe para algo parecido com isso.
+Agora se quisermos criar um para criar arquivos .csv precisaríamos modificar a classe para algo parecido com isso.
 
 ```php
 <?php
@@ -118,8 +117,7 @@ class Logger
     }
 }
 ```
-
-Foi preciso alterar a classe *Logger*, algo que fere o princípio Princípio Aberto/Fechado. A classe tem que está fechada para alteração.
+Foi preciso alterar a classe *Logger*, algo que fere o princípio princípio aberto/fechado. A classe tem que estar fechada para alteração.
 
 Vamos refatorar o nosso código.
 ```php
@@ -160,13 +158,13 @@ class Csv implements Writer
     }
 }
 ```
-Agora sim, implementamos os mesmos recursos que tínhamos antes, mas agora para implementar um novo recurso como escrever em DOC por exemplo, basta criar uma nova classe *Doc* que implemente a interface *Writer* e pronto, não alteramos nada da classe *Logger*.
+Agora sim, implementamos os mesmos recursos que tínhamos antes, mas agora para implementar um novo recurso como escrever em .doc por exemplo, basta criar uma nova classe *Doc* que implemente a interface *Writer* e pronto, não alteramos nada da classe *Logger*.
 
 ## **L**iskov substitution principle(Princípio da Substituição de Liskov)
 O terceiro princípio é o mais complicado de entender, ele foi escrito pela cientista da computação Barbara Liskov que resumiu o seu princípio com
  > Se q(x) é uma propriedade demonstrável dos objetos x de tipo T. Então q(y) deve ser verdadeiro para objetos y de tipo S onde S é um subtipo de T.
 
- Já vi algumas interpretações para o princípio da substituição de Liskov, mas o que eu mais acredito que seja o certo é que as classes derivadas podem ser substituíveis por suas classes base e classes irmãs. Resumindo quando temos uma classe B e classe C que extentende da classe A, deveriamos poder trocar a classe B pelo classe A ou pela classe C dentro do projeto sem quebrar o código.
+Já vi algumas interpretações para o princípio da substituição de Liskov, mas o que eu mais acredito que seja o certo é que as classes derivadas podem ser substituíveis por suas classes base e classes irmãs. Resumindo quando temos uma classe B e classe C que extentende da classe A, deveriamos poder trocar a classe B pelo classe A ou pela classe C dentro do projeto sem quebrar o código.
 
 Vamos para o exemplo.
  ```php
@@ -215,14 +213,13 @@ $logger->write('meu log');
 
 $logger = new DatabaseLogger($database);
 $logger->write('meu log');
-
 ```
 Mas ainda temos um problema, ambas as classes tem dependências para funcionar, nesse caso o indicado é usar um pacote para injeção de dependências.
 
  > Obs: Para isso precisamos sempre cuidar o que vamos retornar nos nossos métodos para não quebrar o código.
 
 ## **I**nterface segregation principle(Princípio da Segregação da Interface)
-O quarto princípio diz que muitas interfaces específicas são melhores que uma única interface, para não forçar uma classe a implementar um método que ela não vai usar. Precisamos criar pequenas interfaces mais específicas ao invés de termos uma única generica.
+O quarto princípio diz que muitas interfaces específicas são melhores que uma única interface, para não forçar uma classe a implementar um método que ela não vai usar. Precisamos criar pequenas interfaces mais específicas ao invés de termos uma única genérica.
 
 Vamos exemplificar para entender melhor, vamos criar algumas interfaces e classes de aves para nos ajudar.
 ```php
@@ -411,7 +408,7 @@ class Notificacao
 }
 ```
 
-Agora desaclopamos a classe *Email* da classe *Notificacao* estamos trabalhando com a abstração *MensagemInterface*, para *Notificacao* não importa qual classe você está usando e sim que ela implemente a interface *MensagemInterface* porque sabemos que ela vai ter o metodo *enviar* que precisamos. Isso também permite que a classe *Notificacao* use outras classes que implementem a interface *MensagemInterface*.
+Agora desaclopamos a classe *Email* da classe *Notificacao* estamos trabalhando com a abstração *MensagemInterface*, para *Notificacao* não importa qual classe você está usando e sim que ela implemente a interface *MensagemInterface* porque sabemos que ela vai ter o método *enviar* que precisamos. Isso também permite que a classe *Notificacao* use outras classes que implementem a interface *MensagemInterface*.
 
 ## Conclusão
 Com isso esclarecemos as noções básica para começar a implementar os princípios do SOLID na sua aplicação. Num mundo real nem sempre conseguimos usar todos os princípios em todas as classes do nosso projeto, eles mesmos são como guias para te ajudar a escrever um código mais maduro. Espero ter ajudado a dar os seus primeiros passos para o aperfeiçoamento dos seus códigos.
