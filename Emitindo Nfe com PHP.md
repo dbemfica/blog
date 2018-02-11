@@ -1,7 +1,7 @@
 ## Introdução
 Emitir notas fiscais eletrônicas(NF-e) com o PHP hoje em dia é uma tarefa bem tranquila. Com um pouco de estudo e dedicação você vai ver que podemos emitir uma nota com poucas linhas de código.
 
-Nesse artigo eu tenho o objetivo de explicar todo o processo para quem nunca precisou enviar uma nota sequer na vida, vou dar uma breve explicação do que são as NF-e e como funciona o seu processo de emissão.
+Nesse artigo eu tenho o objetivo de mostrar para quem tem um conhecimento básico de PHP, todo o processo necessário para enviar uma nota fiscal. Para começar vou dar uma breve explicação do que são as NF-e e como funciona o seu processo de emissão.
 
 ## O que são Nf-e/Nfc-e?
 Uma nota fiscal eletrônica nada mais é do que um arquivo XML que contém informações dos produtos vendidos ou serviços prestados por você com todas as informações tributárias necessárias exigidas pela receita. Esse arquivo é assinado com um certificado digital e enviado para a receita.
@@ -171,7 +171,7 @@ Nesse artigo vamos passar por todas as etapas desse processo. Primeiro: a montag
 Antes de falarmos de código, você precisa ter em mãos o seu certificado digital do tipo A1. Ele é um tipo de certificado que pode ser instalado no computador, normalmente um arquivo com a extensão *.pfx* que pode ser usado sem a necessidade de um token externo. Caso você não tenha o certificado você pode ir ao cartório da sua cidade que lá eles vão te auxiliar no processo para conseguir o seu.
 
 Falando agora de código vamos usar um framework desenvolvido em PHP para esse propósito, estamos falando do
-[nfephp-org/sped-nfe](https://github.com/nfephp-org/sped-nfe) criado por [Roberto L. Machado](https://github.com/robmachado) e mantido por ele e pela comunidade. Esse framework é responsável por executar todas as tarefas mencionadas acima e muitos outros processos fiscais, como cancelamento da nota, emissão da carta de correção entre outros. Se tiver curiosidade para saber mais detalhes sugiro acessar o link do https://github.com/nfephp-org/sped-nfe para ver todas as possibilidades oferecidas.
+[nfephp-org/sped-nfe](https://github.com/nfephp-org/sped-nfe) criado por [Roberto L. Machado](https://github.com/robmachado) e mantido por ele e pela comunidade. Esse framework é responsável por executar todas as tarefas mencionadas acima e muitos outros processos fiscais, como cancelamento da nota, emissão da carta de correção entre outros. Se tiver curiosidade para saber mais detalhes sugiro acessar o link do [https://github.com/nfephp-org/sped-nfe](https://github.com/nfephp-org/sped-nfe) para ver todas as possibilidades oferecidas.
 
 Para a instalação do framework você precisa verificar se as seguintes extensões do PHP estão ativas no seu PHP:
 * PHP 5.6 ou PHP 7.x (recomendável PHP 7.x)
@@ -369,7 +369,7 @@ $nfe->tagdup($std);
 
 $xml = $nfe->getXML(); // O conteúdo do XML fica armazenado na variável $xml
 ```
-Esse exemplo são só alguns campos que podem ser preenchidos para emitir uma Nf-e, mas existem muito mais. Esse é um assunto muito extenso e abordar todos os campos seria bastante complicado, para cada situação a nota deve ser preenchida com um campo ou outro. Se você não tem um bom domínio sobre contabilidade o meu concelho é sempre perguntar para alguem que saiba como deve ser preenchida a nota na situação em questão.
+Esse exemplo são só alguns campos que podem ser preenchidos para emitir uma Nf-e, mas existem muito mais. Abordar todos os campos seria bastante complicado, para cada situação a nota deve ser preenchida com um campo ou outro. Se você não tem um bom domínio sobre contabilidade o meu concelho é sempre perguntar para alguem que saiba como deve ser preenchida a nota na situação em questão.
 
 > Para saber todos os campos suportados pelo framework acesse o link da documentação https://github.com/nfephp-org/sped-nfe/blob/master/docs/Make.md
 
