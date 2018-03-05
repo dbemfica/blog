@@ -642,6 +642,8 @@ if ($std->cStat != 103) {
 }
 $recibo = $std->infRec->nRec; // Vamos usar a variável $recibo para consultar o status da nota
 
+$protocolo = $tools->sefazConsultaRecibo($recibo);
+
 $protocol = new NFePHP\NFe\Factories\Protocol();
 $xmlProtocolado = $protocol->add($xmlAssinado,$protocolo);
 file_put_contents('nota.xml',$xmlProtocolado);
