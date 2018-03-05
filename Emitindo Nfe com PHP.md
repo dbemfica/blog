@@ -406,7 +406,7 @@ $xmlAssinado = $tools->signNFe($xml); // O conteúdo do XML assinado fica armaze
 Para o envio do lote vamos precisar da *$configJson*, *$certificadoDigital* e do nosso XML assinado que está na variável *$xmlAssinado*. Esse método recebe um array com os XMLs nos permitindo enviar mais de um XML por vez, mas nesse caso vamos enviar somente um.
 ```php
 $idLote = str_pad(100, 15, '0', STR_PAD_LEFT); // Identificador do lote
-$resp = $this->tools->sefazEnviaLote([$xmlAssinado], $idLote);
+$resp = $tools->sefazEnviaLote([$xmlAssinado], $idLote);
 
 $st = new NFePHP\NFe\Common\Standardize();
 $std = $st->toStd($resp);
@@ -422,8 +422,7 @@ Usamos a classe *Standardize* para converter o XML retornado pela receita para o
 ## Consultar Recibo
 Com o recibo retornado pelo método *sefazEnviaLote* vamos ver se nota foi autorizada ou rejeitada pela receita. Vamos precisar da *$configJson*, *$certificadoDigital* e do número de recibo que temos na variável *$recibo*.
 ```php
-$tools = new NFePHP\NFe\Tools($configJson, NFePHP\Common\Certificate::readPfx($certificadoDigital, 'senha do certificado'));
-$protocolo = $this->tools->sefazConsultaRecibo($recibo);
+$protocolo = $tools->sefazConsultaRecibo($recibo);
 ```
 > Para detalhes acesse o link da documentação https://github.com/nfephp-org/sped-nfe/blob/master/docs/metodos/ConsultaRecibo.md
 
@@ -633,7 +632,7 @@ $tools = new NFePHP\NFe\Tools($configJson, NFePHP\Common\Certificate::readPfx($c
 $xmlAssinado = $tools->signNFe($xml);
 
 $idLote = str_pad(100, 15, '0', STR_PAD_LEFT); // Identificador do lote
-$resp = $this->tools->sefazEnviaLote([$xmlAssinado], $idLote);
+$resp = $tools->sefazEnviaLote([$xmlAssinado], $idLote);
 
 $st = new NFePHP\NFe\Common\Standardize();
 $std = $st->toStd($resp);
