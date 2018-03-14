@@ -1,20 +1,20 @@
 ## Introdução
-Esse é para ser o primeiro de uma série de artigos que vou escrever para documentar os meus estudos sobre os designer pattern(Padrões de Projetos) e aproveitar para compartilhar esses estudos com a comunidade em forma de artigos.
+Esse é para ser o primeiro de uma série de artigos que vou escrever para documentar os meus estudos sobre os designer pattern(Padrões de Projeto) e aproveitar para compartilhar esses estudos com a comunidade em forma de artigos.
 
 Nessa série vou demonstrar alguns dos principais padrões de projeto do mercado. A minha ideia não é falar de todos os padrões existentes, mas sim explicar os principais deles e demonstrar com um exemplo a sua implementação na linguagem PHP.
 
 ## Design Patterns
-Antes de partirmos para o nosso primeiro padrão como esse é o primeiro artigo dessa série. Achei melhor dar um pequena explicação sobre o assunto de uma forma mais ampla e contar um pouco da sua história.
+Antes de partirmos para o nosso primeiro padrão como esse é o primeiro artigo dessa série. Achei melhor dar um pequena explicação sobre o que são os padrões de projeto de uma forma mais ampla e contar um pouco da sua história.
 
-Um dos livros de maior referência sobre o assunto Designer Patterns é o "Padrões de Projeto - Soluções Reutilizáveis de Software Orientado a Objetos" da famosa Gang of Four(A gangue dos quatro) de 1994. A onde os quatro autores "Erich Gamma", "John Vlissides", "Ralph Johnson" e "Richard Helm" descrevem 24 designs patterns separados em 3 categorias: padrões de criação, padrões estruturais e padrões comportamentais.
+Um dos livros de maior referência sobre é o "Padrões de Projeto - Soluções Reutilizáveis de Software Orientado a Objetos" da famosa Gang of Four(A gangue dos quatro) de 1994. A onde os quatro autores "Erich Gamma", "John Vlissides", "Ralph Johnson" e "Richard Helm" descrevem 24 design pattern separando-os em 3 categorias: padrões de criação, padrões estruturais e padrões comportamentais.
 
-Apesar de hoje existirem mais do que os 24 padrões mencionados no livro, ele mesmo nos dias de hoje como mencionado anteriormente é uma das maiores referências sobre o assunto.
+Apesar de hoje existirem mais do que os 24 padrões mencionados, este livro mesmo nos dias de hoje como mencionado anteriormente é uma das maiores referências sobre o assunto. Recomendo a leitura.
 
 ## Singleton Pattern
-Agora podemos começar, e para isso achei melhor falar sobre o padrão Singleton. Vou explicar a sua estrutura, qual o problema ele busca resolver e mostrar um exemplo com um como podemos usar esse padrão nos nossos projetos desenvolvidos com o PHP.
+Agora podemos começar, e para isso achei melhor falar sobre o padrão de criação Singleton. Vou explicar a sua estrutura, qual o problema ele busca resolver e mostrar um exemplo com um como podemos usar esse padrão nos nossos projetos desenvolvidos com o PHP.
 
 ### Problema a resolver
-O padrão Singleton prega o padrão da instância única. A onde quando você tenta criar uma instância da sua classe, essa classe deve verificar a existência da instância para que se a instância não existir criar uma nova e caso contrário retornar a mesma instância sem criar uma nova.
+O padrão Singleton prega a ideia da instância única. A onde quando você tenta criar uma instância da sua classe, essa classe deve verificar a existência da instância para que se a instância não existir criar uma nova e caso contrário retornar a mesma instância sem criar uma nova. Assim garantindo um unico ponto de acesso global para esse recurso.
 
 O Singleton tem uma estrutura bem simples e de fácil compreensão. como mostrado na imagem abaixo.
 
@@ -26,7 +26,7 @@ O Singleton tem uma estrutura bem simples e de fácil compreensão. como mostrad
 Esse padrão é bastante usado para o desenvolvimentos de classes responsáveis pelo o gerenciamento da conexão com o banco de dados ou o gerenciamentos de logs. Nós permitindo ter acesso a esses recursos na nossa aplicação de forma rápida e descomplicada.
 
 ### Implementação normal
-Agora vamos finalmente falar de código. Mas primeiro vamos criar um classe da forma normal, uma pequena classe Logs. Vou usar esse exemplo demonstra que a cada instância criada estamos literalmente criando uma nova instância na memória.
+Agora vamos finalmente falar de código. Mas primeiro vamos criar um classe da forma convencional, uma pequena classe de Logs. Vou usar esse exemplo demonstra que a cada instância criada estamos literalmente criando uma nova instância na memória.
 
 ```php
 <?php
@@ -46,7 +46,7 @@ var_dump($log3);
 var_dump($log4);
 var_dump($log5);
 ```
-Como podemos ver no exemplo acima a cada nova chamada da classe *Log* nós criamos uma nova instância. começando com *#1* e indo até *#5*
+Se execultarmos o exemplo acima podemos ver que a cada nova chamada da classe *Log* nós criamos uma nova instância. começando com *#1* e indo até *#5*
 ```bash
 object(Log)#1 (0) {
 }
@@ -78,7 +78,12 @@ private function __wakeup()
 ```
 Com isso garantimos que a classe não pode ser mais instanciada de forma normal
 
-Vamos criar uma propriedade privada estática *$instance* e vamos criar um método estático *getInstance* que vai ser o único responsável por retornar a nova instância da nossa classe. Neste método vamos verificar se já existe uma instância na nossa classe.
+
+Vamos criar uma propriedade privada estática *$instance*
+```php
+private static $instance;
+```
+ E também vamos criar um método estático *getInstance* que vai ser o único responsável por retornar a nova instância da nossa classe. É neste método que vamos verificar se já existe uma instância na nossa classe.
 
 ```php
 public static function getInstance()
@@ -117,7 +122,10 @@ class Log
         return self::$instance;
     }
 }
+```
 
+Agora com a nossa classe devidamente modificada pomos testar o nosso exemplo
+```php
 $log = Log::getInstance();
 $log2 = Log::getInstance();
 $log3 = Log::getInstance();
@@ -144,17 +152,15 @@ object(Log)#1 (0) {
 }
 ```
 
-## Singleton é um anti pattern
-Chegamos num assunto um tanto quanto polêmico, porque a maioria dos desenvolvedores defendem a ideia que o Singleton é um anti pattern. Para deixar mais claro um anti pattern é um padrão que é considerado ineficiente ou contra produtivo.
+## Singleton é um anti pattern?
+O Singleton é odiado por muitos desenvolvedores e é considerado por eles como anti patterns. Mas será realmente que isso é verdade? Não tem como eu responder essa pergunta para vocês, mesmo porque isso é uma discussão sem fim, para alguns ele é e para outros não. O que vou fazer é dar alguns pontos negativos do Singleton para que você tome a sua decisão.
 
-Mas porque isso?
+Primeiro precisamos dizer que o Singleton fere o Single Responsibility Principle(Principio da Responsabilidade Unica) do SOLID. Uma classe Singleton tem a responsabilidade de executar a sua responsabilidade primeira como no exemplo de um driver para o banco de dados, mas sendo uma Singleton também tem a responsabilidade de gerenciar a sua instância. Assim possuindo no mínimo duas responsabilidades.
+ > Se você não conhece SOLID? Existe um artigo meu a onde eu explico os seus 5 principios do SOLID [acesse](https://imasters.com.br/linguagens/php/solid-com-php).
 
-Eu pesquisei bastante mas não achei 2 dos motivos que eu acredito serem os principais para defenderem essa ideia.
+Segunda o Singleton garante um acesso global a sua instância, o que muitos desenvolvedores abominam.
 
-1 - Muitos criticam a ideia de usar dados globais no projeto.
-2 - Alguns desenvolvedores usam o Singleton em momentos em que esse padrão mais atrapalha do que traz algum benefício.
-
-Agora dando a minha opinião sobre o assunto. O Singleton como qualquer outro padrão tem vantagens e desvantagens e cabe ao desenvolver saber onde e quando usar um padrão específico. O Singleton é um padrão que se não for sabiamente utilizada pode realmente dar dor de cabeça. Mas o contrário também pode facilitar a vida de muitos desenvolvedores.
+Acredito que esses dois são os principais motivos para que o Singleton tenha esse estigma. Mas na minha opinião ele é um padrão como qualquer outro, tem suas vantagens e desvantagens cabe ao desenvolver ter a sabedorias para saber quando e onde usá-lo.
 
 ## Conclusão
-Como falei anteriormente esse artigo é primeiro de uma série que pretendendo escrever para compartilhar os meus estudos com a comunidade. Comecei falando do Singleton por ser um padrão bastante famoso e de fácil compreensão. Espero que com esses pequenos passos que possa ter de demostrado como podemos facilmente criar a nossa classe usando o Singleton.
+Como falei anteriormente esse artigo é primeiro de uma série que pretendendo escrever para compartilhar os meus estudos com a comunidade. Comecei falando do Singleton por ser um padrão bastante famoso e de fácil compreensão. Espero que com esses pequenos passos que possa ter de demostrado como podemos facilmente criar a nossa classe usando o Singleton no PHP.
