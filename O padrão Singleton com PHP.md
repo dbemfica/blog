@@ -161,5 +161,6 @@ Como falei anteriormente esse artigo é primeiro de uma série que pretendendo e
 
 ## Referências
 <https://www.schoolofnet.com/curso-design-patterns-pt2-padroes-de-criacao/>
+
 <https://www.casadocodigo.com.br/products/livro-design-paterns-php>
 <https://github.com/webfatorial/PadroesDeProjetoPHP/tree/master/Creational/Singleton>
