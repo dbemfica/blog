@@ -6,21 +6,20 @@ Nessa série vou demonstrar alguns dos principais padrões de projeto do mercado
 ## Design Patterns
 Antes de partirmos para o nosso primeiro padrão como esse é o primeiro artigo dessa série. Achei melhor dar um pequena explicação sobre o que são os padrões de projeto de uma forma mais ampla e contar um pouco da sua história.
 
-Para começar nada melhor do citar um dos livros de maior referência sobre o assunto, estou falando do "Padrões de Projeto - Soluções Reutilizáveis de Software Orientado a Objetos" da famosa Gang of Four(Gangue dos Quatro) de 1994. A onde os quatro autores "Erich Gamma", "John Vlissides", "Ralph Johnson" e "Richard Helm" descrevem 24 design pattern. Eles os separam em 3 categorias: padrões de criação, padrões estruturais e padrões comportamentais. Nessa serie eu vou escolher dois padrões de cada categoria para explicar e demonstrar o seu funcionamento.
+Para começar nada melhor do citar um dos livros de maior referência sobre o assunto, estou falando do "Padrões de Projeto - Soluções Reutilizáveis de Software Orientado a Objetos" da famosa Gang of Four(Gangue dos Quatro) de 1994. A onde os quatro autores "Erich Gamma", "John Vlissides", "Ralph Johnson" e "Richard Helm" descrevem 24 design pattern. Eles os separam em 3 categorias: padrões de criação, padrões estruturais e padrões comportamentais. Nessa série eu vou escolher dois padrões de cada categoria para explicar e demonstrar o seu funcionamento.
 
-Apesar de hoje existirem mais do que os 24 padrões mencionados, este livro mesmo nos dias atuais como mencionado anteriormente é uma das maiores referências sobre o assunto.
+Apesar existirem mais do que os 24 padrões mencionados, este livro mesmo nos dias atuais como mencionado anteriormente é uma das maiores referências sobre o assunto.
 
 ## Singleton Pattern
 Agora podemos começar, e para isso achei melhor falar sobre o padrão de criação Singleton. Vou explicar a sua estrutura, qual o problema ele busca resolver e mostrar um exemplo com um como podemos usar esse padrão nos nossos projetos desenvolvidos com o PHP.
 
 ### Problema a resolver
-O padrão Singleton prega a ideia da instância única. A onde quando você tenta criar uma instância da sua classe, essa classe deve verificar a existência da instância para que se a instância não existir criar uma nova e caso contrário retornar a mesma instância sem criar uma nova. Assim garantindo um único ponto de acesso global para esse recurso.
+O padrão Singleton prega a ideia da instância única. A onde quando você tenta criar uma instância da sua classe, essa classe deve verificar a existência da instância para que se a instância não existir criar uma nova e caso contrário retornar a mesma instância sem criar uma nova. Assim garantindo menor consumo de memória e um único ponto de acesso global para esse recurso.
 
 O Singleton tem uma estrutura bem simples e de fácil compreensão. como mostrado na imagem abaixo.
 
 ![Diagrama UML de uma classe singleton.](https://raw.githubusercontent.com/webfatorial/PadroesDeProjetoPHP/master/Creational/Singleton/uml/uml.png)
  > Esse é o diagrama UML do padrão Singleton
-
 
 
 Esse padrão é bastante usado para o desenvolvimentos de classes responsáveis pelo o gerenciamento da conexão com o banco de dados ou o gerenciamentos de logs. Nós permitindo ter acesso a esses recursos na nossa aplicação de forma rápida e descomplicada.
@@ -61,7 +60,7 @@ object(Log)#5 (0) {
 ```
 
 ### Implementação Singleton
-Agora vamos começar a implementar o padrão Singleton na nossa classe, vamos começar a fazer isso alterando a visibilidade dos nosso métodos mágicos *__construct* o *__wake* e do *__clone*.
+Agora vamos começar a implementar o padrão Singleton na nossa classe, vamos começar a fazer isso alterando a visibilidade dos nosso métodos mágicos *__construct* o *__wakeup* e do *__clone*.
 
 ```php
 private function __construct()
@@ -76,7 +75,7 @@ private function __wakeup()
 {
 }
 ```
-Com isso garantimos que a classe não pode ser mais instanciada de forma normal
+Com isso garantimos que a classe não pode ser mais instanciada de forma normal.
 
 
 Vamos criar uma propriedade privada estática *$instance*
@@ -153,16 +152,14 @@ object(Log)#1 (0) {
 ```
 
 ## Singleton é um anti pattern?
-O Singleton é odiado por muitos desenvolvedores e é considerado por eles como anti patterns. Mas será realmente que isso é verdade? Não tem como eu responder essa pergunta para vocês, mesmo porque isso é uma discussão sem fim, para alguns ele é e para outros não. O que vou fazer é dar alguns pontos negativos do Singleton para que você tome a sua decisão.
-
-Primeiro precisamos dizer que o Singleton fere o Single Responsibility Principle(Principio da Responsabilidade Única) do SOLID. Uma classe Singleton tem a responsabilidade de executar a sua responsabilidade primeira como no exemplo de um driver para o banco de dados, mas sendo uma Singleton também tem a responsabilidade de gerenciar a sua instância. Assim possuindo no mínimo duas responsabilidades.
- > Se você não conhece SOLID? Existe um artigo meu a onde eu explico os seus 5 principios do SOLID [acesse](https://imasters.com.br/linguagens/php/solid-com-php).
-
-Segunda o Singleton garante um acesso global a sua instância, o que muitos desenvolvedores abominam.
+Para muitos desenvolvedores o Singleton é considerado um anti patterns, mas por que será? Acredito que uns dos principais motivos é pela natureza estática. Isso nos traz alguns problemas como não podermos trabalhar com interfaces e o aumento de acoplamento na classe. Além disso temos como estamos falando de acesso global, existe um perigo de sobrescrever o comportamento da classe e gerar comportamentos inesperados no sistema.
 
 Acredito que esses dois são os principais motivos para que o Singleton tenha esse estigma. Mas na minha opinião ele é um padrão como qualquer outro, tem suas vantagens e desvantagens cabe ao desenvolvedor ter a sabedorias para saber quando e onde usá-lo.
 
 ## Conclusão
 Como falei anteriormente esse artigo é primeiro de uma série que pretendendo escrever para compartilhar os meus estudos com a comunidade. Comecei falando do Singleton por ser um padrão bastante famoso e de fácil compreensão. Espero que com esses pequenos passos que possa ter de demostrado como podemos facilmente criar a nossa classe usando o Singleton no PHP.
 
-
+## Referências
+<https://www.schoolofnet.com/curso-design-patterns-pt2-padroes-de-criacao/>
+<https://www.casadocodigo.com.br/products/livro-design-paterns-php>
+<https://github.com/webfatorial/PadroesDeProjetoPHP/tree/master/Creational/Singleton>
