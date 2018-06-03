@@ -1,7 +1,7 @@
 ## Introdução
 Esse é para ser o primeiro de uma série de artigos que vou escrever para documentar os meus estudos sobre os designer pattern(Padrões de Projeto) e aproveitar para compartilhar esses estudos com a comunidade em forma de artigos.
 
-Nessa série vou demonstrar alguns dos principais padrões de projeto do mercado. A minha ideia não é falar de todos os padrões existentes, mas sim explicar os principais deles e demonstrar com um exemplo a sua implementação na linguagem PHP.
+Nessa série vou demonstrar alguns dos principais padrões de projeto do mercado. A minha ideia não é falar de todos os padrões existentes, mas sim explicar alguns dos principais e demonstrar com um exemplo a sua implementação na linguagem PHP.
 
 ## Design Patterns
 Antes de partirmos para o nosso primeiro padrão como esse é o primeiro artigo dessa série. Achei melhor dar um pequena explicação sobre o que são os padrões de projeto de uma forma mais ampla e contar um pouco da sua história.
