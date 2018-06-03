@@ -152,7 +152,7 @@ object(Log)#1 (0) {
 ```
 
 ## Singleton é um anti pattern?
-Para muitos desenvolvedores o Singleton é considerado um anti patterns, mas por que será? Acredito que uns dos principais motivos é pela natureza estática. Isso nos traz alguns problemas como não podermos trabalhar com interfaces e o aumento de acoplamento na classe. Além disso temos como estamos falando de acesso global, existe um perigo de sobrescrever o comportamento da classe e gerar comportamentos inesperados no sistema.
+Para muitos desenvolvedores o Singleton é considerado um anti patterns, mas por que será? Acredito que uns dos principais motivos é pela natureza estática. Isso nos traz alguns problemas como não podermos trabalhar com interfaces e o aumento de acoplamento na classe. Além disso como estamos falando de acesso global, existe um perigo de sobrescrever o comportamento da classe e gerar comportamentos inesperados no sistema.
 
 Acredito que esses dois são os principais motivos para que o Singleton tenha esse estigma. Mas na minha opinião ele é um padrão como qualquer outro, tem suas vantagens e desvantagens cabe ao desenvolvedor ter a sabedorias para saber quando e onde usá-lo.
 
