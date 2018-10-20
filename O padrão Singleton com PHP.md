@@ -1,7 +1,7 @@
 ## Introdução
 Esse é para ser o primeiro de uma série de artigos que vou escrever para documentar os meus estudos sobre os designer pattern(Padrões de Projeto) e aproveitar para compartilhar esses estudos com a comunidade em forma de artigos.
 
-Nessa série vou demonstrar alguns dos principais padrões de projeto do mercado. A minha ideia não é falar de todos os padrões existentes, mas sim explicar os principais deles e demonstrar com um exemplo a sua implementação na linguagem PHP.
+Nessa série vou demonstrar alguns dos principais padrões de projeto do mercado. A minha ideia não é falar de todos os padrões existentes, mas sim explicar alguns dos principais e demonstrar com um exemplo a sua implementação na linguagem PHP.
 
 ## Design Patterns
 Antes de partirmos para o nosso primeiro padrão como esse é o primeiro artigo dessa série. Achei melhor dar um pequena explicação sobre o que são os padrões de projeto de uma forma mais ampla e contar um pouco da sua história.
@@ -152,7 +152,7 @@ object(Log)#1 (0) {
 ```
 
 ## Singleton é um anti pattern?
-Para muitos desenvolvedores o Singleton é considerado um anti patterns, mas por que será? Acredito que uns dos principais motivos é pela natureza estática. Isso nos traz alguns problemas como não podermos trabalhar com interfaces e o aumento de acoplamento na classe. Além disso temos como estamos falando de acesso global, existe um perigo de sobrescrever o comportamento da classe e gerar comportamentos inesperados no sistema.
+Para muitos desenvolvedores o Singleton é considerado um anti patterns, mas por que será? Acredito que uns dos principais motivos é pela natureza estática. Isso nos traz alguns problemas como não podermos trabalhar com interfaces e o aumento de acoplamento na classe. Além disso como estamos falando de acesso global, existe um perigo de sobrescrever o comportamento da classe e gerar comportamentos inesperados no sistema.
 
 Acredito que esses dois são os principais motivos para que o Singleton tenha esse estigma. Mas na minha opinião ele é um padrão como qualquer outro, tem suas vantagens e desvantagens cabe ao desenvolvedor ter a sabedorias para saber quando e onde usá-lo.
 
