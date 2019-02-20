@@ -22,21 +22,19 @@ Depois de baixar pegue o arquivo **php_redis.dll** colocar na sua pasta de exten
 ```shel
 extension=php_redis.dll
 ```
-Pronto
 
 ### No linux
-No linux o precesso é bem simples, processo vai variar de acordo a sua distribuição linux, mas para o Ubuntu ederivados(que é a distruição que eu estou acustumado) basta usar o seu gerenciador de pacotes. 
+No linux o processo é bem simples, processo vai variar de acordo a sua distribuição linux, mas para o Ubuntu e derivados(que é a distribuição que eu estou acostumado) basta usar o seu gerenciador de pacotes. 
 ```shel
 sudo apt install php[verão só PHP]-redis
 ```
+
+### Testando a instalação
 
 Para verificar se instalação foi feita corretamente basta rodar o comando *php -m* no seu terminal ou cmd caso esteja no Windows.
 ```shel
 php -m
 ```
-Pronto
-
-### Testando a instalação
 
 Que vai aparecer *redis* entre as extensões instaladas do seu PHP.
 
@@ -58,7 +56,7 @@ session.save_path = "N;/path"
 E mude as duas para
 ```shel
 session.save_handler = redis
-session.save_path = "tcp://[ip do seu servidor]:[porta do seu servidor6379]?auth=senha_do_redis"
+session.save_path = "tcp://[ip do seu servidor]:[porta do seu servidor]?auth=senha_do_redis"
 ```
  > Por padrão a porta do redis é 6379 e o auth é opcional, isso é só se o seu redis possui senha para acesso.
 
