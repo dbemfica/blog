@@ -1,4 +1,4 @@
-Para muitas pessoas fazer comparações, fazer a adição, a subtração e outras operações com datas com a linguagem PHP uma pequena dor de cabeça. Bom pelo menos para mim era e acredito que muitos outros leitores também seja. Mas vim para mostrar que isso vai ficar no passado com a classe DateTime nativa do PHP.
+Para muitas pessoas fazer comparações, fazer a adição, a subtração e outras operações com datas com a linguagem PHP é uma pequena dor de cabeça. Bom pelo menos para mim era e acredito que muitos outros leitores também seja. Mas vim para mostrar que isso vai ficar no passado com a classe DateTime nativa do PHP.
 
 Bom já comecei dizendo ela é nativa então não precisa ativar nenhuma extensão ou baixar nenhum pacote. basta sair usando-a como no exemplo a baixo.
 ```php
