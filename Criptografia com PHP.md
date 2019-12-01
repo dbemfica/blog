@@ -2,7 +2,7 @@ Hoje eu gostaria de falar sobre um dos principais aspectos da segurança da info
 
 Mas antes de irmos aos detalhes sobre como fazer a implementação acho importante comentar que vou cobrir aqui dois tipos de criptografia, um deles é a criptografia do tipo Hash e outro que vou chamar de criptografia tradicional.
 
-# Criptografia do tipo Hash
+## Criptografia do tipo Hash
 Uma criptografia hash é aquele que é impossível de se desfazer, então quando texto é criptofado dessa forma não é possível reverter o processo e recuperar a mensagem original. Por isso costuma-se dizer que uma criptografia hash é uma criptografia de mão única, não podendo voltar atrás depois.
 
 Você pode se perguntar porque que nós vamos criptografar uma mensagem de uma forma que não vamos poder recuperar depois. Na verdade isso é muito útil como vamos ver nos exemplos abaixo.
@@ -92,7 +92,7 @@ if (password_verify($string, $hash)) {
 ```
  > Para mais detalhes sobre a função password_verify você pode acessar a documentação clicando  [aqui](https://www.php.net/manual/pt_BR/function.password-verify.php)
 
-# Criptografia tradicional
+## Criptografia tradicional
 Agora vamos falar do que eu costumo chamar de criptografia tradicional. Nesse tipo de criptografia diferente da tipo hash é possível descriptografar a mensagem e recuperar-la para a mesma forma que ela estava antes do processo de criptografia.
 
 Este tipo de criptografia tem como objetivo de proteger a mensagem para que somente as pessoas(no nosso caso alguma aplicação) possa le-la. Sendo muito usado para enviar dados que possuam a necessidade de serem sigilosas.
