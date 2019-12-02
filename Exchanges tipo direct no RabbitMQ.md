@@ -1,20 +1,20 @@
-Hoje vou publicar a parte 2 da série de artigos sobre o RabbitMQ, se você caiu de paraquedas nesse artigo eu recomendo fortemente que você acesse o primeiro artigo desse seria para não ficar perdido no assunto. O primeiro artigo foi bastante teórico mais muito importante se você nunca ouviu falar ou sabe muito ponto sobre o RabbitMQ. Você pode acessar o primeiro artigo clicando neste link [Introdução ao RabbitMQ](https://diogobemfica.com.br/Introducao-ao-rabbitmq).
+Hoje vou publicar a parte 3 da série de artigos sobre o RabbitMQ, se você caiu de paraquedas nesse artigo eu recomendo fortemente que você acesse os artigos anteriores desta série para não ficar perdido no assunto. Você pode acessar os outros artigos dessa série clicando neste link [Artigos sobre mensageria](https://diogobemfica.com.br/categoria/mensageria).
 
-No artigo desta semana vou explicar sobre o tipo de Exchange **direct** e vou mostrar como usar o PHP para fazermos tanto a publicação quanto o consumo das mensagens enviamos para o RabbitMQ
+No artigo desta semana vou explicar sobre o tipo de Exchange **direct** e vou mostrar como usar o PHP para fazermos tanto a publicação quanto o consumo das mensagens.
 
 ## Exchange direct
-Uma Exchange do tipo direct é um Exchange guiada pela **Routing key**. Está Exchange é ligada a quantos filas você quiser e usamos o **Routing key** para definir para qual fila a mensagem será enviada. Vejamos a imagem abaixo para entender melhor.
+Uma Exchange do tipo **direct** é um Exchange guiada pela **Routing key**. Está Exchange é ligada a quantos filas você quiser e usamos o **Routing key** para definir para qual fila a mensagem será enviada. Vejamos a imagem abaixo para entender melhor.
 
 ![Esquema Exchange direct](https://diogobemfica.com.br/multimidia/2019_12_01_esquema_exchange_direct.jpg)
 
-Nessa imagem nós temos uma Exchange chamada **emitirNfe** do tipo **direct** ligada a três filas diferentes: **enviaParaReceita**, **salvaXml** e **enviaEmailCliente**. Você pode estar se perguntando mas se enviarmos uma mensagem para essa Exchange nós não estariamos enviando a mensagem para as três filas ao mesmo tempo? É ai que entra a **Routing key**, na hora de enviarmos(publicar) a mensagem para essa Exchange enviamos também a **Routing key** e usamos ela para definir para qual fica deve ir a mensagem.
+Nessa imagem nós temos uma Exchange chamada **emitirNfe** do tipo **direct** ligada a três filas diferentes: **enviaParaReceita**, **salvaXml** e **enviaEmailCliente**. Você pode estar se perguntando mas se enviarmos uma mensagem para essa Exchange nós não estaríamos enviando a mensagem para as três filas ao mesmo tempo? É aí que entra a **Routing key**, na hora de enviarmos(publicar) a mensagem para essa Exchange enviamos também a **Routing key** e usamos ela para definir para qual fila deve ir a mensagem.
 
 Vamos dar uma exemplo. Olhando na imagem acima quando queremos enviar uma mensagem somente para fila **enviarParaReceita** nós precisamos enviar junto a **Routing key** **enviar** assim a nossa mensagem não vai parar nas outras filas.
 
 ## Publicando uma mensagem.
 Agora que entendemos como esse tipo de Exchange funciona podemos seguir para a implementação usando o PHP. Vamos fazer como fizemos na imagem acima. Vamos criar uma Exchange do tipo **direct** chamada **emitirNfe**.
 
-Primeiro vamos criar um arquivo chamado *sender.php** e fazer conexão com o RabbitMQ. Vejamos um exemplo abaixo
+Primeiro vamos criar um arquivo chamado **sender.php** e vamos fazer conexão com o RabbitMQ. Vejamos um exemplo abaixo
 
 ```php
 <?php
@@ -30,13 +30,13 @@ $connection = new AMQPStreamConnection($host, $porta, $usuario, $senha);
 $channel = $connection->channel();
 ```
 
-Agora vamos usar o método do **exchange_declare** criar a nossa Exchange, nós passamos como primeiro parâmetro o nome da Exchange e como segundo o seu tipo.
+Agora vamos usar o método do **exchange_declare** para criar a nossa Exchange, nós passamos como primeiro parâmetro o nome da Exchange e como segundo o seu tipo.
 ```php
 $nomeExchange = 'emitirNfe';
 $tipoExchange = 'direct';
 $channel->exchange_declare($nomeExchange, $tipoExchange);
 ```
- > Como mencionado no artigo anterior esses para declarar uma Exchange ou uma fila são opcionais se a Exchange ou a fila já existirem no RabbitMQ.
+ > Como mencionado no artigo anterior esses métodos que usamos para declarar uma Exchange ou uma fila são opcionais se a Exchange ou a fila já existirem no RabbitMQ não precisam ser usados.
 
 Agora vamos usar o método **queue_declare** visto no artigo anterior para criar as três filas **enviaParaReceita**, **salvaXml** e **enviaEmailCliente**.
 
@@ -46,7 +46,7 @@ $channel->queue_declare('salvaXml');
 $channel->queue_declare('enviaEmailCliente');
 ```
 
-Agora precisamos fazer a ligação das filas com a Exchange, para isso usado o método **sss** passando três parâmetros, primeiro o nome da fila, segundo o nome da Exchange e terceiro a **Routing key**. Este processo precisa ser feito para as três filas.
+Agora precisamos fazer a ligação das filas com a Exchange, para isso usamos o método **queue_bind** passando três parâmetros, primeiro o nome da fila, segundo o nome da Exchange e terceiro a **Routing key**. Este processo precisa ser feito para as três filas.
 
 ```php
 $queue = 'enviaParaReceita';
@@ -85,7 +85,7 @@ Se executarmos ***php sender.php*** no terminal veremos a seguinte mensagem.
 [dbemfica@dbemfica-pc rabbitmq-php]$ php sender.php
 Mensagem enviada: 'conteúdo da XML para receita federal'
 ```
-Evamos poder ver no RabbitMQ que somente a fila **enviaParaReceita** recebeu a mensagem. As outras estão zeradas.
+E vamos poder ver no RabbitMQ que somente a fila **enviaParaReceita** recebeu a mensagem. As outras estão zeradas.
 
 ![Mensagem enviada para fila enviaParaReceita](https://diogobemfica.com.br/multimidia/2019_12_01_sender_exchange_tipy_direct_1.png)
 
@@ -108,13 +108,13 @@ echo "Mensagem enviada: '" . $conteudo . "'\n";
 $channel->close();
 $connection->close();
 ```
- > Comentamos o código anterior que faz a publicação na fila e criamos um novo igual o anterior mas mudamos somente a **Routing key**.
+ > Comentamos o código anterior que fez a publicação na fila e criamos um novo igual ao anterior mas mudamos somente a **Routing key**.
 
 Se executarmos o **sender.php** agora vamos ter a mesma saída no terminal e vamos poder ver que adicionamos uma mensagem na fila **salvaXml** e as outras filas continuaram os mesmos números de mensagens.
 
 ![Mensagem enviada para fila salvaXml](https://diogobemfica.com.br/multimidia/2019_12_01_sender_exchange_tipy_direct_2.png)
 
-E para finalizar a publicação não vamos deixar de fora da fila **enviaEmailCliente**, vamos exatamente o mesmo processo do anterior.
+E para finalizar o processo de publicação não vamos deixar de fora da fila **enviaEmailCliente**, vamos exatamente o mesmo processo anterior.
 
 ```php
 $conteudo = 'conteudo da XML para receita federal';
@@ -203,9 +203,9 @@ $connection->close();
 ```
 
 ## Consumindo uma mensagem
-Para fazer o consumos das mensagens enviadas para as três filas o processo basicamente o mesmo do artigo anterior, por isso não vou muito em detalhes desta vez.
+Para fazer o consumo das mensagens enviadas para as três filas o processo basicamente o mesmo do artigo anterior, por isso não vou dar muitos detalhes desta vez.
 
-Vamos precisar de uma arquivo, vamos chamar ele de **consumer.php**, vamos importar as classes necessárias e fazer a conexão com o RabbitMQ
+Vamos precisar de uma arquivo, vamos chamar ele de **consumer.php**, vamos importar as classes necessárias e fazer a conexão com o RabbitMQ.
 
 ```php
 <?php
@@ -250,7 +250,7 @@ while ($channel->is_consuming()) {
 $channel->close();
 $connection->close();
 ```
- > Lembrando que nos próximos artigos eu explicarem cada um dos parâmetros que a função **basic_consume** recebe.
+ > Lembrando que nos próximos artigos eu explicarei cada um dos parâmetros que a função **basic_consume** recebe.
 
 Se executarmos ***php consumer.php*** no terminal veremos a seguinte mensagem.
 ```shell
@@ -258,11 +258,11 @@ Se executarmos ***php consumer.php*** no terminal veremos a seguinte mensagem.
 Mensagem recebida 'conteúdo da XML para receita federal'
 ```
 
-E vamos pode ver se a mensagem sumiu da fila **enviaParaReceita**
+E vamos pode ver se a mensagem sumiu da fila **enviaParaReceita**.
 
 ![Mensagem consumida da fila enviaEmailCliente](https://diogobemfica.com.br/multimidia/2019_12_01_sender_exchange_tipy_direct_4.png)
 
-Agora vamos fazer que fizemos vamos fazer como fizemos anteriormente, vou comentar o consumo e criar um como para cada fila que temos  e depois mostrar o resultado no RabbitMQ.
+Agora vamos fazer o que fizemos para publicar as mensagens, vou comentar o consumo e criar um  para cada fila que temos e depois mostrar o resultado no RabbitMQ.
 ```php
 // $queue = 'enviaParaReceita';
 // $consumer_tag = '';
@@ -383,7 +383,7 @@ $channel->close();
 $connection->close();
 ```
 
-Espero que você tenha entendido o que são as Exchanges do tipo **direct** e que esteja gostando desta série de artigos. No artigo da semana que vem vou falar sobre o Tipo de Exchange **fanout**, espero ver você semana que vem. até lá.
+Espero que você tenha entendido o que são as Exchanges do tipo **direct** e que esteja gostando desta série de artigos. No artigo da semana que vem vou falar sobre o tipo de Exchange **fanout**, espero ver você semana que vem. até lá.
 
 ## Referências
 
