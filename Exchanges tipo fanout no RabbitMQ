@@ -1,0 +1,231 @@
+Bem vindo a parte 4 da série de artigos sobre o RabbitMQ, se este é o primeiro artigo dessa série que você está vendo eu recomendo fortemente que você acesse os artigos anteriores desta série para não ficar perdido no assunto. Você pode acessar os outros artigos dessa série clicando neste link [Artigos sobre mensageria](https://diogobemfica.com.br/categoria/mensageria).
+
+No artigo de hoje vou explicar sobre o tipo de Exchange **fanout** e como sempre vou mostrar como podemos usar o PHP para fazermos tanto a publicação quanto o consumo das mensagens com esse tipo de Exchange.
+
+## Exchange fanout
+Uma Exchange do tipo **fanout** é uma Exchange diferentes das que vimos até agora, o seu comportamento é bem sim de entender, basicamente ela vai enviar um cópia das mensagens enviadas para ela para todas as filas que ela estiver ligada. Estou dizendo que não importa se você usar uma **Routing key**, todas as mensagens enviadas para esse tipo de Exchange vão ser enviadas para todas as filas a ela ligada.
+
+![Esquema Exchange fanout](https://diogobemfica.com.br/multimidia/2019_12_08_exchange_fanout.jpg)
+
+Nessa imagem nós temos uma Exchange chamada **checkout** do tipo **fanout** ligada a três filas diferentes: **baixaEstoque**, **processaPagamento** e **enviaEmailCliente**. Este é um exemplo que podemos ver com uma certa frequência no nosso dia a dia. Quem nunca comprou online, finalizou a compra e somente alguns minutos depois recebeu um e-mail dizendo que o pagamento do cartão de crédito foi aprovado. Isso pode acontecer porque a empresa deve ter usado algum sistema de filas para processar do pagamento.
+
+## Publicando uma mensagem.
+Como no artigo anterior vamos usar essa imagem para montar os nossos exemplos. Primeiro vamos criar um arquivo chamado **sender.php** e vamos fazer conexão com o RabbitMQ. Vejamos um exemplo abaixo
+
+```php
+<?php
+require_once __DIR__ . '/vendor/autoload.php';
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
+
+$host = 'localhost';
+$porta = 5672;
+$usuario = 'guest';
+$senha = 'guest';
+$connection = new AMQPStreamConnection($host, $porta, $usuario, $senha);
+$channel = $connection->channel();
+```
+
+Agora vamos usar o método do **exchange_declare** para criar a nossa Exchange, nós passamos como primeiro parâmetro o nome da Exchange e como segundo o seu tipo, neste caso fanout.
+```php
+$nomeExchange = 'checkout';
+$tipoExchange = 'fanout';
+$channel->exchange_declare($nomeExchange, $tipoExchange);
+```
+ > Mais uma vez vou mencionar que esses métodos que usamos para declarar uma Exchange ou uma fila são opcionais se a Exchange ou a fila já existirem no RabbitMQ não precisam ser usados.
+
+Agora vamos usar o método **queue_declare** para criar as três filas **baixaEstoque**, **processaPagamento** e **enviaEmailCliente**.
+
+```php
+$channel->queue_declare('baixaEstoque');
+$channel->queue_declare('processaPagamento');
+$channel->queue_declare('enviaEmailCliente');
+```
+
+Agora precisamos fazer a ligação das filas com a Exchange, para isso usamos o método **queue_bind** passando dois parâmetros, primeiro o nome da fila e o segundo o nome da Exchange. Este processo precisa ser feito para as três filas.
+
+```php
+$queue = 'baixaEstoque';
+$exchange = 'checkout';
+$channel->queue_bind($queue, $exchange);
+
+$queue = 'processaPagamento';
+$exchange = 'checkout';
+$channel->queue_bind($queue, $exchange);
+
+$queue = 'enviaEmailCliente';
+$exchange = 'checkout';
+$channel->queue_bind($queue, $exchange);
+```
+
+Pronto agora quando enviarmos uma mensagem para a Exchange **checkout** ela será replicada para as três filas. Vejamos um exemplo abaixo.
+
+```php
+$conteudo = 'Dados da compra realizada';
+$msg = new AMQPMessage($conteudo);
+
+$exchange = 'checkout';
+$channel->basic_publish($msg, $exchange);
+echo "Mensagem enviada: '" . $conteudo . "'\n";
+
+$channel->close();
+$connection->close();
+```
+
+Se executarmos ***php sender.php*** no terminal veremos a seguinte mensagem.
+```shell
+[dbemfica@dbemfica-pc rabbitmq-php]$ php sender.php
+Mensagem enviada: 'Dados da compra realizada'
+```
+E vamos poder ver no RabbitMQ que as nossas três mensagens foram para as filas que criamos.
+
+![Mensagem enviada para fila para todas as filas](https://diogobemfica.com.br/multimidia/2019_12_08_sender_exchange_tipy_fanout_1.png)
+
+No final o nosso arquivo **sender.php** vai ter o seguinte conteúdo.
+```php
+<?php
+require_once __DIR__ . '/vendor/autoload.php';
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
+
+$host = 'localhost';
+$porta = 5672;
+$usuario = 'guest';
+$senha = 'guest';
+$connection = new AMQPStreamConnection($host, $porta, $usuario, $senha);
+$channel = $connection->channel();
+
+$nomeExchange = 'checkout';
+$tipoExchange = 'fanout';
+$channel->exchange_declare($nomeExchange, $tipoExchange);
+
+$channel->queue_declare('baixaEstoque');
+$channel->queue_declare('processaPagamento');
+$channel->queue_declare('enviaEmailCliente');
+
+$queue = 'baixaEstoque';
+$exchange = 'checkout';
+$channel->queue_bind($queue, $exchange);
+
+$queue = 'processaPagamento';
+$exchange = 'checkout';
+$channel->queue_bind($queue, $exchange);
+
+$queue = 'enviaEmailCliente';
+$exchange = 'checkout';
+$channel->queue_bind($queue, $exchange);
+
+$conteudo = 'Dados da compra realizada';
+$msg = new AMQPMessage($conteudo);
+
+$exchange = 'checkout';
+$channel->basic_publish($msg, $exchange);
+echo "Mensagem enviada: '" . $conteudo . "'\n";
+
+$channel->close();
+$connection->close();
+```
+
+## Consumindo uma mensagem
+Para realizarmos o consumo o processo é basicamente o mesmo dos artigos anteriores então vou me limitar a mostrar como realizar o consumo somente de uma fila, no caso a **baixaEstoque** para as outras filas o processo vai ser exatamente o mesmo.
+
+Vamos precisar de uma arquivo, vamos chamar ele de **consumer.php**, vamos importar as classes necessárias e fazer a conexão com o RabbitMQ.
+
+```php
+<?php
+require_once __DIR__ . '/vendor/autoload.php';
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+
+$host = 'localhost';
+$porta = 5672;
+$usuario = 'guest';
+$senha = 'guest';
+$connection = new AMQPStreamConnection($host, $porta, $usuario, $senha);
+$channel = $connection->channel();
+```
+Também declaramos as filas para caso elas não existam. Vamos declarar as filas que vamos trabalhar.
+```php
+$channel->queue_declare('baixaEstoque');
+```
+ > Sempre lembrando que esse processo é opcional
+
+Criamos o nosso **callback**.
+```php
+$callback = function ($msg) {
+    echo "Mensagem recebida '" . $msg->body . "'\n";
+};
+```
+
+E realizamos o consumo passando os parâmetros necessários e fechamos a conexão.
+```php
+$queue = 'baixaEstoque';
+$consumer_tag = '';
+$no_local = false;
+$no_ack = true;
+$exclusive = false;
+$nowait = false;
+$channel->basic_consume($queue, $consumer_tag, $no_local, $no_ack, $exclusive, $nowait, $callback);
+while ($channel->is_consuming()) {
+    $channel->wait();
+}
+
+$channel->close();
+$connection->close();
+```
+ > Sempre lembrando que nos próximos artigos eu explicarei cada um dos parâmetros que a função **basic_consume** recebe.
+
+Se executarmos ***php consumer.php*** no terminal veremos a seguinte mensagem.
+```shell
+[dbemfica@dbemfica-pc rabbitmq-php]$ php consumer.php
+Mensagem recebida 'Dados da compra realizada'
+```
+
+E vamos pode ver se a mensagem sumiu da fila **baixaEstoque**.
+
+![Mensagem consumida da fila baixaEstoque](https://diogobemfica.com.br/multimidia/2019_12_08_consumer_exchange_tipy_fanout_1.png)
+
+Agora o processo para as outras filas é exatamente o mesmo, se você está acompanhando essa serie não terá nenhuma dificuldade em fazer essas implementações.
+
+No final o nosso arquivo **consumer.php** vai ter o seguinte conteúdo.
+```php
+<?php
+require_once __DIR__ . '/vendor/autoload.php';
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+
+$host = 'localhost';
+$porta = 5672;
+$usuario = 'guest';
+$senha = 'guest';
+$connection = new AMQPStreamConnection($host, $porta, $usuario, $senha);
+$channel = $connection->channel();
+
+$channel->queue_declare('baixaEstoque');
+
+$callback = function ($msg) {
+    echo "Mensagem recebida '" . $msg->body . "'\n";
+};
+
+$queue = 'baixaEstoque';
+$consumer_tag = '';
+$no_local = false;
+$no_ack = true;
+$exclusive = false;
+$nowait = false;
+$channel->basic_consume($queue, $consumer_tag, $no_local, $no_ack, $exclusive, $nowait, $callback);
+while ($channel->is_consuming()) {
+    $channel->wait();
+}
+
+$channel->close();
+$connection->close();
+```
+
+O artigo dessa semana foi mais simples mas isso também porque uma Exchange **fanout** é bem simples de entender, espero que esteja gostando desta série e aguardo você na semana que vem onde vamos falar do tipo de Exchange **topic**, até lá.
+
+## Referências
+
+https://www.cloudamqp.com/blog/2015-05-18-part1-rabbitmq-for-beginners-what-is-rabbitmq.html
+
+https://www.rabbitmq.com/tutorials/tutorial-one-php.html
+
+https://www.youtube.com/watch?v=RnIwwm00UPM
