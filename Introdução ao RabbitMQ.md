@@ -22,7 +22,7 @@ Para fazer a instalação achei melhor mostrar como fazer usando o Docker, isso 
 
 Já que vamos usar o Docker você vai precisar ter o Docker instalado no seu computador, mas tendo ele instalado basta rodar o seguinte comando no seu terminal.
 ```bach
-docker run -d --hostname my-rabbit --name rabbitmq -p 15672:15672 -p 5672:5672 rabbitmq:management-alpinedr
+docker run -d --hostname my-rabbit --name rabbitmq -p 15672:15672 -p 5672:5672 rabbitmq:management-alpine
 ```
 
 O RabbitMQ tem uma interface web para que você possa fazer o seu gerenciamento, então depois de rodar o comando acima você pode acessar o endereço *http://localhost:15672*. Você se deparar com tela semelhante a imagem abaixo.
